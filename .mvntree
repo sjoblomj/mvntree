@@ -1,6 +1,6 @@
 # This acts as an alias for mvn dependency:tree
-# It will make the tree prettier, apply nice colours
-# and remove the leading "[INFO] " from each line.
+# It will make the tree prettier, apply nice colours and remove the leading "[INFO] " from each line.
+# Use the code however you want, and please spread it. Origin: https://github.com/sjoblomj/mvntree
 
 mvntree() {
     mvn dependency:tree -Ddetail=true | awk '
