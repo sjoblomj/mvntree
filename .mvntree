@@ -5,11 +5,12 @@
 mvntree() {
     mvn dependency:tree -Ddetail=true | awk '
         BEGIN {
+            # Preserve spaces
             FPAT = "([[:space:]]*[^[:space:]]+)";
             OFS = "";
         }
         {
-            hassubstituted = 0;
+            hasprintedline = 0;
             if (NF >= 3) {
                 # There are at least 3 text columns. See if it contains a tree.
 
@@ -21,9 +22,9 @@ mvntree() {
                 # up until the first letter or number
 
                 if (tree ~ "\\|" || tree ~ "+" || tree ~ "\\\\") {
-                    # tree contains one of the characters above. We regard this
-                    # as meaning that the variable tree actually contains a
-                    # dependency tree.
+                    # tree contains at least one of the characters above.
+                    # We regard this as meaning that the variable tree
+                    # actually contains a dependency tree.
 
                     # Substitute the tree characters for something more pretty
                     sub (" ",    "",  tree);
@@ -33,22 +34,28 @@ mvntree() {
                     gsub("-",    "─", tree);
 
                     # Split the dependencies into columns so that they can be coloured.
-                    n = split(dep, deps, ":");
+                    numberofcolumns = split(dep, deps, ":");
 
+
+                    # The last column of deps contains the scope, which is usually "compile" or "test".
+                    # In rare cases, there might be a message after it however. We need to apply some
+                    # messy logic to extract the message.
                     scope = deps[5];
                     msg = "";
+
                     if (scope ~ " ") {
                         # The last column contains a space. This is pretty uncommon.
                         # Add everything after the space to msg.
 
-                        scope = substr(deps[5], 0, index(deps[5], " ")); #Everything before space
+                        scope = substr(deps[5], 0, index(deps[5], " ")); # Everything before space
                         sub(" ", "", scope);
-                        msg = substr(dep, index(dep, " ")); #Everything after space
+                        msg = substr(dep, index(dep, " ")); # Everything after space
                     }
-                    if (n > 5) {
-                        # It seems there are more than 5 ':'s. Add the rest of the string to msg.
+                    if (numberofcolumns > 5) {
+                        # It seems there are more than 5 ":" characters. Add the rest of the string to msg.
                         msg = substr(dep, length(deps[1] ":" deps[2] ":" deps[3] ":" deps[4] ":" scope) + 1);
                     }
+
 
                     # Apply pretty colours!
                     dep =  "\033[36m"   deps[1] "\033[0m" \
@@ -58,18 +65,17 @@ mvntree() {
                           ":\033[33m"   scope   "\033[0m" ;
 
                     printf "%s%s%s\n", tree, dep, msg;
-
-                    hassubstituted = 1;
+                    hasprintedline = 1;
                 }
             }
 
             if (NF == 2) {
                 # There are exactly 2 text columns
 
-                n = split($NF, deps, ":");
-                if (n == 4) {
-                    # There are exactly 4 ':'. We regard this as meaning that
-                    # this is the root of the tree.
+                numberofcolumns = split($NF, deps, ":");
+                if (numberofcolumns == 4) {
+                    # There are exactly 4 ":" characters. We regard this as
+                    # meaning that this is the root of the tree.
 
                     # Apply pretty colours!
                     dep =  "\033[38;5;19;48;5;30m" deps[1] "\033[0m" \
@@ -79,13 +85,12 @@ mvntree() {
                     sub(" ", "",  dep);
 
                     printf "%s\n", dep;
-
-                    hassubstituted = 1;
+                    hasprintedline = 1;
                 }
             }
 
-            if (!hassubstituted) {
-                # This line was not part of the tree. Remove [INFO] and print it
+            if (!hasprintedline) {
+                # This line was not part of the tree. Remove "[INFO] " and print it
                 gsub("\\[INFO\\] ", "", $0);
                 printf "%s\n", $0;
             }
