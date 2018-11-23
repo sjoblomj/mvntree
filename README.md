@@ -1,10 +1,11 @@
 # mvntree
+A Maven dependency tree prettifier.
 ![mvntree](mvntree.png)
 
 ## About
-When developing Java applications with [Maven](https://en.wikipedia.org/wiki/Apache_Maven), you soon find yourself dealing with dependency problems. You may have multiple dependencies that bring in incompatible versions of libraries that cause problems. A nice way to see the dependencies in a project is by generating a Maven dependency tree by running `mvn dependency:tree`. The command is not that pretty though.
+When developing Java applications with [Maven](https://en.wikipedia.org/wiki/Apache_Maven), you eventually find yourself dealing with dependency problems. You may have multiple dependencies that bring in incompatible versions of libraries that cause problems. A nice way to see the dependencies in a project is to generate a Maven dependency tree by running `mvn dependency:tree`. The output is not very pretty though.
 
-This is a small awk script to prettify the Maven dependency tree. It will turn the ascii tree from the crude form that Maven outputs into something a little prettier. The different columns in the dependencies will have nice colours applied to them. Finally, the superfluous "[INFO] " at the start of each line is removed to save space.
+This is a small awk script to prettify the Maven dependency tree. It will turn the ascii tree from the crude form that Maven outputs into something a little prettier. The different columns in the dependencies will have nice colours applied to them. Also, the superfluous "[INFO] " at the start of each line is removed to save space.
 
 ## Installation
 This acts as shell alias. You have two ways of loading the command:
