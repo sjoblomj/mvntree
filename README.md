@@ -25,3 +25,7 @@ fi
 ```
 
 You can now use the command `mvntree` and enjoy the prettiness.
+
+
+## Testing
+Testing can be done by editing the test.txt file and running `__mvntree__ "cat test.txt"`

@@ -3,7 +3,10 @@
 # Use the code however you want, and please spread it. Origin: https://github.com/sjoblomj/mvntree
 
 mvntree() {
-    mvn dependency:tree -Ddetail=true | awk '
+    __mvntree__ "mvn dependency:tree -Ddetail=true"
+}
+__mvntree__() {
+    eval $1 | awk '
         BEGIN {
             # Preserve spaces
             FPAT = "([[:space:]]*[^[:space:]]+)";
@@ -40,20 +43,31 @@ mvntree() {
                     # The last column of deps contains the scope, which is usually "compile" or "test".
                     # In rare cases, there might be a message after it however. We need to apply some
                     # messy logic to extract the message.
-                    scope = deps[5];
+                    scope = deps[numberofcolumns];
                     msg = "";
+                    classifier = "";
 
                     if (scope ~ " ") {
                         # The last column contains a space. This is pretty uncommon.
                         # Add everything after the space to msg.
 
-                        scope = substr(deps[5], 0, index(deps[5], " ")); # Everything before space
+                        scope = substr(deps[numberofcolumns], 0, index(deps[numberofcolumns], " ")); # Everything before space
                         sub(" ", "", scope);
                         msg = substr(dep, index(dep, " ")); # Everything after space
                     }
-                    if (numberofcolumns > 5) {
-                        # It seems there are more than 5 ":" characters. Add the rest of the string to msg.
-                        msg = substr(dep, length(deps[1] ":" deps[2] ":" deps[3] ":" deps[4] ":" scope) + 1);
+
+                    if (numberofcolumns > 5) { # There are more than 5 columns (i.e more than 4 ":" characters)
+                        if (deps[4] !~ /[:0-9:]/ && deps[5] ~ /[:0-9:]/) {
+                            # There is an additional column between the type and version.
+                            # Put that column in the classifier variable and adjust the other columns.
+
+                            classifier = ":\033[1;35m" deps[4] "\033[0m";
+                            deps[4] = deps[5];
+
+                        } else {
+                            # Add the rest of the string to msg.
+                            msg = substr(dep, length(deps[1] ":" deps[2] ":" deps[3] ":" deps[4] ":" scope) + 1);
+                        }
                     }
 
 
@@ -61,6 +75,7 @@ mvntree() {
                     dep =  "\033[36m"   deps[1] "\033[0m" \
                           ":\033[1;34m" deps[2] "\033[0m" \
                           ":\033[35m"   deps[3] "\033[0m" \
+                          classifier                      \
                           ":\033[1;31m" deps[4] "\033[0m" \
                           ":\033[33m"   scope   "\033[0m" ;
 

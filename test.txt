@@ -1,0 +1,18 @@
+[INFO] ------------------------------------------------------------------------
+[INFO] Building spacelaser 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ spacelaser ---
+[INFO] org.sjoblomj.projects:spacelaser:jar:1.0-SNAPSHOT
+[INFO] +- com.numbusds:oauth2-oidc-sdk:jar:5.57:compile
+[INFO] |  +- net.minidev:json-smart:jar:2.3:compile (version selected from constraint [1.3.1,2.3])
+[INFO] |  |  \- net.minidev:accessors-smart:jar:1.2:compile
+[INFO] |  |     \- org.ow2.asm:asm:jar:5.0.4:compile
+[INFO] |  \- com.nimbusds:lang-tag:jar:1.4.4:compile (version selected from constaint [1.4.3,))
+[INFO] +- net.logstash.logback:logstash-logback-encoder:jar:5.2:compile
+[INFO] |  \- com.thoughtworks.xstream:xstream:jar:1.4.5:compile
+[INFO] |     +- xmlpull:xmlpull:jar:1.1.3.1:compile
+[INFO] |     \- xpp3:xpp3_min:jar:1.1.4c:compile
+[INFO] +- org.kaboom:communication-service:test-jar:tests:18.4.0-SNAPSHOT:test
+[INFO] +- org.kaboom:communication-messages:jar:jaxws:1.1.2:compile (version selected from constraint [1.1.0,))
+[INFO] \- junit:junit:jar:4.11:test
