@@ -57,7 +57,7 @@ __mvntree__() {
                     }
 
                     if (numberofcolumns > 5) { # There are more than 5 columns (i.e more than 4 ":" characters)
-                        if (deps[4] !~ /[:0-9:]/ && deps[5] ~ /[:0-9:]/) {
+                        if (deps[5] ~ /[:0-9:]/) {
                             # There is an additional column between the type and version.
                             # Put that column in the classifier variable and adjust the other columns.
 

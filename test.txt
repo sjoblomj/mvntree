@@ -1,7 +1,7 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] Building spacelaser 1.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
-[INFO] 
+[INFO]
 [INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ spacelaser ---
 [INFO] org.sjoblomj.projects:spacelaser:jar:1.0-SNAPSHOT
 [INFO] +- com.numbusds:oauth2-oidc-sdk:jar:5.57:compile
@@ -15,4 +15,5 @@
 [INFO] |     \- xpp3:xpp3_min:jar:1.1.4c:compile
 [INFO] +- org.kaboom:communication-service:test-jar:tests:18.4.0-SNAPSHOT:test
 [INFO] +- org.kaboom:communication-messages:jar:jaxws:1.1.2:compile (version selected from constraint [1.1.0,))
+[INFO] |  \- io.netty:netty-transport-native-epoll:jar:linux-x86_64:4.1.50.Final:compile
 [INFO] \- junit:junit:jar:4.11:test
